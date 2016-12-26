@@ -3,6 +3,7 @@ from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.keys import Keys
 
 import unittest
+import time
 #from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
@@ -48,19 +49,33 @@ class NewVisitorTest(unittest.TestCase):
 
 		inputbox.send_keys(Keys.ENTER)
 
+		time.sleep(3) #use this to avoid StaleElementReferenceException
 		table = self.browser.find_element_by_id('id_list_table')
 		rows = table.find_elements_by_tag_name('tr')
+		#rows_ref = lambda: table.find_elements_by_tag_name('tr')
+		#self.browser.implicitly_wait(3)
+		#foundBuy = False
+		#for row in rows_ref():
+		#	self.browser.implicitly_wait(3)
+		#	rows_text = row.text
+		#	if (rows_text == '1: Buy peacock feathers'):
+		#		foundBuy = True
+		#		break
+		#if not (foundBuy):
+		#	self.fail('Could not find "1: Buy peacock feathers" in rows\' text')
 		self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
 
 		#There is still a text box inviting her to add another item. She
 		# enters "Use peacock feathers to make a fly" (Edith is very methodical)
 
+		self.browser.implicitly_wait(3)
 		inputbox = self.browser.find_element_by_id('id_new_item')
 		inputbox.send_keys('Use peacock feathers to make a fly')
 		inputbox.send_keys(Keys.ENTER)
 
 		# The page updates again, and now shows both items on her list
 
+		time.sleep(2)
 		self.check_for_row_in_list_table('1: Buy peacock feathers')
 		self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 

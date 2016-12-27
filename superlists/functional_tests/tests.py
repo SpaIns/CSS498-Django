@@ -46,26 +46,16 @@ class NewVisitorTest(LiveServerTestCase):
 
 		inputbox.send_keys('Buy peacock feathers')
 
-		#When she hits enter, the page updates and now the pge lists
-		#"1: Buy peacock feathers" as an item in the todo lists
+		#When she hits enter, she is taken to a new url and now 
+		#the page lists "1: Buy peacock feathers" as an item 
+		#in the todo lists
 
 		inputbox.send_keys(Keys.ENTER)
+		edith_list_url = self.browser.current_url
+		self.assertRegex(edith_list_url, 'lists.+')
+		self.check_for_row_in_list_table('1: Buy peacock feathers')
 
 		time.sleep(1) #use this to avoid StaleElementReferenceException
-		table = self.browser.find_element_by_id('id_list_table')
-		rows = table.find_elements_by_tag_name('tr')
-		#rows_ref = lambda: table.find_elements_by_tag_name('tr')
-		#self.browser.implicitly_wait(3)
-		#foundBuy = False
-		#for row in rows_ref():
-		#	self.browser.implicitly_wait(3)
-		#	rows_text = row.text
-		#	if (rows_text == '1: Buy peacock feathers'):
-		#		foundBuy = True
-		#		break
-		#if not (foundBuy):
-		#	self.fail('Could not find "1: Buy peacock feathers" in rows\' text')
-		self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
 
 		#There is still a text box inviting her to add another item. She
 		# enters "Use peacock feathers to make a fly" (Edith is very methodical)
@@ -81,9 +71,36 @@ class NewVisitorTest(LiveServerTestCase):
 		self.check_for_row_in_list_table('1: Buy peacock feathers')
 		self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
-		# Edith wonders whether the site will remember her list. Then she sees
-		# that the site has generated a unique URL for her -- there is some
-		# explanatory text to that effect.
+		# Now a new user, francis comes along tot he site.
+
+		## We use a new browser session to make sure no information of
+		## Edith's is coming through from cookies etc
+		self.browser.quit()
+		binary = FirefoxBinary(r'C:\Program Files (x86)\Mozilla Firefox\firefox.exe') 
+		self.browser = webdriver.Firefox(firefox_binary=binary)
+
+		# Francis visits the home page. There is no sign of Edith's
+		# list.
+		self.browser.get(self.live_server_url)
+		page_text = self.browser.find_element_by_tag_name('body').text
+		self.assertNotIn('Buy peacock feathers', page_text)
+		self.assertNotIn('make a fly', page_text)
+
+		# Francis starts a new list by entering an item. He is
+		# less interesting than Edith...
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox.send_keys('Buy milk')
+		inputbox.send_keys(Keys.ENTER)
+
+		# Francis gets his own unique URL
+		fracis_list_url = self.browser.current_url
+		self.assertRegex(fracis_list_url, 'lists/.+')
+		self.assertNotEqual(fracis_list_url, edith_list_url)
+
+		#Again, there is no trace of Edith's list
+		page_text = self.browser.find_element_by_tag_name('body').text
+		self.assertNotIn('Buy peacock feathers', page_text)
+		self.assertIn('Buy milk', page_text)
 
 		self.fail('Finish the test!')
 

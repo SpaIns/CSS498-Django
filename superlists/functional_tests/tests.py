@@ -2,14 +2,14 @@ from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.keys import Keys
 
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 #import unittest
 import time
 #from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
 
 	def setUp(self):
 		#caps = DesiredCapabilities.FIREFOX
@@ -22,6 +22,7 @@ class NewVisitorTest(LiveServerTestCase):
 		#browser = webdriver.Chrome()
 
 	def tearDown(self):
+		self.browser.refresh()
 		self.browser.quit()
 
 	def test_can_start_a_list_for_one_user(self):
@@ -148,7 +149,7 @@ class NewVisitorTest(LiveServerTestCase):
 		self.assertAlmostEqual(
 			inputbox.location['x'] + inputbox.size['width'] / 2,
 			512,
-			delta=5
+			delta=10
 		)
 
 	def check_for_row_in_list_table(self, row_text):

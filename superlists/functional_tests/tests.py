@@ -12,14 +12,9 @@ import time
 class NewVisitorTest(StaticLiveServerTestCase):
 
 	def setUp(self):
-		#caps = DesiredCapabilities.FIREFOX
-		#caps["marionette"] = True
-		#caps["binary"] = 'C:\Program Files (x86)\Mozilla Firefox\firefox.exe'
-		binary = FirefoxBinary(r'C:\Program Files (x86)\Mozilla Firefox\firefox.exe') 
-		#browser = webdriver.Firefox(capabilities=caps)
+		binary = FirefoxBinary('/home/spa/Desktop/firefox') 
 		self.browser = webdriver.Firefox(firefox_binary=binary)
 		self.browser.implicitly_wait(3)
-		#browser = webdriver.Chrome()
 
 	def tearDown(self):
 		self.browser.refresh()

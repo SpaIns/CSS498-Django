@@ -12,7 +12,7 @@ import time
 class NewVisitorTest(StaticLiveServerTestCase):
 
 	def setUp(self):
-		binary = FirefoxBinary('/home/spa/Desktop/firefox') 
+		binary = FirefoxBinary(r'/home/spa/firefox') 
 		self.browser = webdriver.Firefox(firefox_binary=binary)
 		self.browser.implicitly_wait(3)
 

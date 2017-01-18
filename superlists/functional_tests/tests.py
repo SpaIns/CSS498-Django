@@ -12,8 +12,9 @@ import time
 class NewVisitorTest(StaticLiveServerTestCase):
 
 	def setUp(self):
-		binary = FirefoxBinary(r'/home/spa/firefox') 
+		binary = FirefoxBinary(r'/home/spa/firefox/firefox') 
 		self.browser = webdriver.Firefox(firefox_binary=binary)
+		#self.browser = webdriver.Chrome()
 		self.browser.implicitly_wait(3)
 
 	def tearDown(self):
@@ -90,7 +91,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 		## We use a new browser session to make sure no information of
 		## Edith's is coming through from cookies etc
 		self.browser.quit()
-		binary = FirefoxBinary(r'C:\Program Files (x86)\Mozilla Firefox\firefox.exe') 
+		binary = FirefoxBinary(r'/home/spa/firefox/firefox') 
 		self.browser = webdriver.Firefox(firefox_binary=binary)
 
 		# Francis visits the home page. There is no sign of Edith's
@@ -144,7 +145,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 		self.assertAlmostEqual(
 			inputbox.location['x'] + inputbox.size['width'] / 2,
 			512,
-			delta=10
+			delta=20
 		)
 
 	def check_for_row_in_list_table(self, row_text):

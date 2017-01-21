@@ -5,7 +5,7 @@ import random
 REPO_URL = 'https://github.com/SpaIns/CSS498-Django.git'
 
 #Command I used to run this:
-#fab deploy:host=spa@192.168.1.17 --port=56734 --user=steffan -i /home/spa/Desktop/id_rsa
+#fab deploy:host=steffan@192.168.1.17 --port=56734 -i /home/spa/Desktop/id_rsa
 
 
 def deploy():
@@ -71,5 +71,5 @@ def _update_static_files(source_folder):
     #do a sed I assume
 def _update_database(source_folder):
     settings_path =  source_folder + '/superlists/superlists/settings.py'
-    sed(settings_path, "'NAME': os.path.join(BASE_DIR, '../database/db.sqlite3'),", "'NAME': os.path.join(BASE_DIR, '../../database/db.sqlite3'),")
+    sed(settings_path, "../database/db.sqlite3", "../../database/db.sqlite3")
     run('cd %s && ../../virtualenv/bin/python manage.py migrate --noinput' % (source_folder + '/superlists',))

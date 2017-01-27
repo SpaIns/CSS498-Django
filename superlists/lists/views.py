@@ -19,7 +19,7 @@ def view_list(request, list_id):
 			#print('full clean passed ' + item.text)
 			item.save()
 			#print('save passed ' + item.text)
-			return redirect('/lists/%d/' % (list_.id,))
+			return redirect(list_)
 		except ValidationError:
 			item.delete() #wouldn't work without this for some reason
 			#print('test failed ' + item.text)
@@ -36,4 +36,4 @@ def new_list(request):
 		list_.delete()
 		error = "You can't have an empty list item"
 		return render(request, 'home.html', {"error": error})
-	return redirect('/lists/%d/' % (list_.id,))
+	return redirect(list_)

@@ -26,6 +26,10 @@ class HomePageTest(TestCase):
 		self.assertEqual(response.content.decode(),
 			expected_response.content.decode())
 
+	def test_home_page_uses_item_form(self):
+		response = self.client.get('/')
+		self.assertIsInstance(response.context['form'], ItemForm)
+
 
 class ListViewTest(TestCase):
 

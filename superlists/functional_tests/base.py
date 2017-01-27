@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.keys import Keys
 
+from unittest import skip
+
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 #import unittest
@@ -10,8 +12,7 @@ import sys
 #from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-class NewVisitorTest(StaticLiveServerTestCase):
-
+class FunctionalTest(StaticLiveServerTestCase):
 	@classmethod
 	def setUpClass(cls):
 		for arg in sys.argv:
@@ -31,6 +32,15 @@ class NewVisitorTest(StaticLiveServerTestCase):
 	def tearDown(self):
 		self.browser.refresh()
 		self.browser.quit()
+
+	def check_for_row_in_list_table(self, row_text):
+		table = self.browser.find_element_by_id('id_list_table')
+		rows = table.find_elements_by_tag_name('tr')
+		self.assertIn(row_text, [row.text for row in rows])
+
+
+class NewVisitorTest(FunctionalTest):
+
 
 	def test_can_start_a_list_for_one_user(self):
 		#Edith has heard about a cool new online to-do app. She goes
@@ -135,6 +145,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
 		# Satisfied, They both go back to sleep
 
+class LayoutAndStylingTest(FunctionalTest):
 
 	def test_layout_and_styling(self):
 		#Edith goes to the home page
@@ -159,10 +170,25 @@ class NewVisitorTest(StaticLiveServerTestCase):
 			delta=20
 		)
 
-	def check_for_row_in_list_table(self, row_text):
-		table = self.browser.find_element_by_id('id_list_table')
-		rows = table.find_elements_by_tag_name('tr')
-		self.assertIn(row_text, [row.text for row in rows])
+	
+class ItemValidationTest(FunctionalTest):
+	
+	@skip
+	def test_cannot_add_empty_list_items(self):
+		#Edith goes to the home page and accidentally tries to submit
+		# an empty list item. She hits Enter on the empty input box
+
+		#The home page refreshes, and there is an error message saying
+		# that list items cannot be blank
+
+		#She tries again with some text for the item, which now works
+
+		#Perversely, she now decides to submit a second blank list item
+
+		#She recieves a similar warning on the list page
+
+		#And she can correct it by filling some text in
+		self.fail('write me!')
 
 #if __name__ == '__main__':
 #	unittest.main(warnings='ignore')

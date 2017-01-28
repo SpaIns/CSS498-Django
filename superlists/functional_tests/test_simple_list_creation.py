@@ -71,7 +71,7 @@ class NewVisitorTest(FunctionalTest):
 
 		# Edith starts a new todo list
 		self.browser.get(self.server_url)
-		inputbox = self.browser.get_item_input_box()
+		inputbox = self.get_item_input_box()
 		inputbox.send_keys('Buy peacock feathers')
 		inputbox.send_keys(Keys.ENTER)
 

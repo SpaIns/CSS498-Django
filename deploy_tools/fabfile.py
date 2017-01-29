@@ -45,7 +45,7 @@ def _update_settings(source_folder, site_name):
     #may have to add the website address manually here
     sed(settings_path,
         'ALLOWED_HOSTS =.+$',
-        'ALLOWED_HOSTS = ["%s"]' % (site_name,)
+        'ALLOWED_HOSTS = ["%s", "%s"]' % (site_name, 'django498.ga')
     )
     secret_key_file = source_folder + '/superlists/superlists/secret_key.py'
     if not exists(secret_key_file):

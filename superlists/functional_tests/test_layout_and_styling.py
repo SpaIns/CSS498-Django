@@ -31,7 +31,8 @@ class LayoutAndStylingTest(FunctionalTest):
 
 		#She starts a new list and sees the input is nicely
 		# centered there too
-		inputbox.send_keys('testing\n')
+		inputbox.send_keys('testing')
+		self.browser.find_element_by_name('email')
 		inputbox = self.get_item_input_box()
 		self.assertAlmostEqual(
 			inputbox.location['x'] + inputbox.size['width'] / 2,

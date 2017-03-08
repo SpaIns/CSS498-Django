@@ -46,10 +46,10 @@ class NewVisitorTest(FunctionalTest):
 		inputbox.send_keys(Keys.ENTER)
 		#edith_list_url = self.browser.current_url
 		#self.assertRegex(edith_list_url, '/lists/.+')
-		time.sleep(1)
-		self.check_for_row_in_list_table('1: Buy peacock feathers')
+		#time.sleep(1)
+		self.wait_for_row_in_list_table('1: Buy peacock feathers')
 
-		time.sleep(1) #use this to avoid StaleElementReferenceException
+		#time.sleep(1) #use this to avoid StaleElementReferenceException
 
 		#There is still a text box inviting her to add another item. She
 		# enters "Use peacock feathers to make a fly" (Edith is very methodical)
@@ -61,9 +61,10 @@ class NewVisitorTest(FunctionalTest):
 
 		# The page updates again, and now shows both items on her list
 
-		time.sleep(1)
-		self.check_for_row_in_list_table('1: Buy peacock feathers')
-		self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
+		#time.sleep(1)
+		self.wait_for_row_in_list_table('2: Use peacock feathers to make a fly')
+		self.wait_for_row_in_list_table('1: Buy peacock feathers')
+		
 
 		#satisfied, she goes back to sleep
 
@@ -75,8 +76,8 @@ class NewVisitorTest(FunctionalTest):
 		inputbox.send_keys('Buy peacock feathers')
 		inputbox.send_keys(Keys.ENTER)
 
-		time.sleep(1)
-		self.check_for_row_in_list_table('1: Buy peacock feathers')
+		#time.sleep(1)
+		self.wait_for_row_in_list_table('1: Buy peacock feathers')
 
 		# She notices her list has a unique url
 		edith_list_url = self.browser.current_url
@@ -103,7 +104,7 @@ class NewVisitorTest(FunctionalTest):
 		inputbox.send_keys('Buy milk')
 		inputbox.send_keys(Keys.ENTER)
 
-		time.sleep(1)
+		time.sleep(1) #can I remove this? Testing now... nope, still need it for the moment
 		# Francis gets his own unique URL
 		francis_list_url = self.browser.current_url
 		self.assertRegex(francis_list_url, '/lists/.+')

@@ -21,9 +21,10 @@ class LoginTest(FunctionalTest):
 		self.browser.find_element_by_name('email').send_keys(Keys.ENTER)
 
 		#A message appears telling her an email has been sent
-		time.sleep(0.5) # I know we just got rid of almost all the hardcoded sleeps but...
-		body = self.browser.find_element_by_tag_name('body')
-		self.assertIn('Check your email', body.text)
+		self.wait_for(lambda: self.assertIn(
+			'Check your email',
+			self.browser.find_element_by_tag_name('body').text
+		))
 
 		#She checks her email and finds a message
 		email = mail.outbox[0]
@@ -41,10 +42,12 @@ class LoginTest(FunctionalTest):
 		self.assertIn(self.server_url, url)
 
 		# she clicks it
-		time.sleep(10)
+		#time.sleep(10)
 		self.browser.get(url)
 
 		# she is logged in!
-		self.browser.find_element_by_link_text('Log out')
+		self.wait_for(
+			lambda: self.browser.find_element_by_link_text('Log out')
+		)
 		navbar = self.browser.find_element_by_css_selector('.navbar')
 		self.assertIn(TEST_EMAIL, navbar.text)

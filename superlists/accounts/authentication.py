@@ -8,7 +8,7 @@ class PasswordlessAuthenticationBackend(object):
 		if not Token.objects.filter(uid=uid).exists():
 			print('no token found', file=sys.stderr)
 			return None
-		token = Token.objects.get(uid)
+		token = Token.objects.get(uid)  #error here
 		print('got token', file=sys.stderr)
 		try:
 			user = ListUser.objects.get(email=token.email)

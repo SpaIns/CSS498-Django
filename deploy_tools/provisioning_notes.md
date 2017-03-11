@@ -1,6 +1,12 @@
 Provisioning a new site
 ============================
 
+##Upstart Job
+
+* see gunicorn-upstart.template.conf
+* replace SITENAME with, eg, staging.my-domain.com
+* replace SEKRIT with email password
+
 ## Required packages:
 
 * nginx

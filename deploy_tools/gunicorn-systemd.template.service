@@ -5,7 +5,8 @@ Description=Gunicorn server for SITENAME
 Restart=on-failure
 User=steffan
 WorkingDirectory=/home/steffan/sites/SITENAME/source/superlists
-ExecStart=/home/steffan/sites/SITENAME/virtualenv/bin/gunicorn --bind unix:/tmp/SITENAME.socket superlists.wsgi:application
+Enviroment=EMAIL_PASSWORD=SEKRIT
+ExecStart=/home/steffan/sites/SITENAME/virtualenv/bin/gunicorn --bind unix:/tmp/SITENAME.socket --access-logfile ../access.log --error-logfile ../error.log superlists.wsgi:application
 
 [Install]
 WantedBy=multi-user.target

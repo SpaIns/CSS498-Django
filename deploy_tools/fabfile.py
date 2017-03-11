@@ -45,7 +45,7 @@ def _update_settings(source_folder, site_name):
     #may have to add the website address manually here
     sed(settings_path,
         'ALLOWED_HOSTS =.+$',
-        'ALLOWED_HOSTS = ["%s"]' % (site_name,)
+        'ALLOWED_HOSTS = ["%s"]' % (site_name, "django498.ga", "http://django498.ga",) #just added last 2 w/o testing
     )
     secret_key_file = source_folder + '/superlists/superlists/secret_key.py'
     if not exists(secret_key_file):
@@ -73,3 +73,23 @@ def _update_database(source_folder):
     settings_path =  source_folder + '/superlists/superlists/settings.py'
     sed(settings_path, "../database/db.sqlite3", "../../database/db.sqlite3")
     run('cd %s && ../../virtualenv/bin/python manage.py migrate --noinput' % (source_folder + '/superlists',))
+
+def _get_base_folder(host):
+	return '~/sites/' + host
+
+def _get_manage_dot_py(host):
+	return '{path}/virtualenv/bin/python {path}/source/superlists/manage.py'.format(
+		path=_get_base_folder(host)
+	)
+
+def reset_database():
+	run('{manage_py} flush --noinput'.format(
+		manage_py=_get_manage_dot_py(env.host)
+	))
+
+def create_session_on_server(email):
+	session_key = run('{manage_py} create_session {email}'.format(
+		manage_py=_get_manage_dot_py(env.host),
+		email=email,
+	))
+	print(session_key)

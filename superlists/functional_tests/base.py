@@ -3,6 +3,7 @@ from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 from selenium.common.exceptions import NoSuchElementException
+from .server_tools import reset_database
 
 from unittest import skip
 
@@ -33,13 +34,18 @@ class FunctionalTest(StaticLiveServerTestCase):
 	def setUpClass(cls):
 		for arg in sys.argv:
 			if 'liveserver' in arg:
-				cls.server_url = 'http://' + arg.split('=')[1]
+				cls.server_host = arg.split('=')[1]
+				cls.server_url = 'http://' + cls.server_host
+				cls.against_staging = True
 				return
 		super().setUpClass()
+		cls.against_staging = False
 		cls.server_url = cls.live_server_url
 
 
 	def setUp(self):
+		if self.against_staging:
+			reset_database(self.server_host)
 		binary = FirefoxBinary(r'/home/spa/firefox/firefox') 
 		self.browser = webdriver.Firefox(firefox_binary=binary)
 		#self.browser = webdriver.Chrome()
